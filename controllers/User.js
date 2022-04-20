@@ -1,4 +1,6 @@
 const User = require("../models/User")
+const { v4: uuidv4 } = require("uuid");
+
 
 exports.createUser = (req, res) =>{
     console.log("req.body",req.body)
@@ -15,6 +17,35 @@ exports.createUser = (req, res) =>{
 }
 
 exports.getUser = (req, res) =>{
-    console.log("kucj")
-    res.send("user saved")
+  User.findById(req.params.id)
+  .then((user)=>{
+      res.status(200).json({"status":"success",user})
+  })
+  .catch((error) => {
+      return res.status(500).send({
+        status: "error",
+        message: error.message,
+      });
+    });
+
+}
+
+exports.LoginUser = (req, res) =>{
+  User.find({"email":req.body.email, "password":req.body.password})
+  .then((user)=>{  
+    if (user.length) {
+    res.status(200).json({"status":"success",user})
+    }
+
+    else {
+    res.status(401).json({"status":"failure","message": "Email or password is incorrect."})
+    }
+  })
+  .catch((error) => {
+      return res.status(500).send({
+        status: "error",
+        message: error.message,
+      });
+    });
+
 }
