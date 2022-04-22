@@ -31,6 +31,7 @@ exports.getUser = (req, res) =>{
 }
 
 exports.LoginUser = (req, res) =>{
+  console.log("reqbody",req.body)
   User.find({"email":req.body.email, "password":req.body.password})
   .then((user)=>{  
     if (user.length) {
@@ -38,7 +39,7 @@ exports.LoginUser = (req, res) =>{
     }
 
     else {
-    res.status(401).json({"status":"failure","message": "Email or password is incorrect."})
+    res.status(500).json({"status":"failure","message": "Email or password is incorrect."})
     }
   })
   .catch((error) => {
