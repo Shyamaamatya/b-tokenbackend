@@ -19,6 +19,9 @@
     "express": "^4.17.3",
     "moment": "^2.29.3",
     "mongoose": "^6.3.0",
+    "qs": "^6.10.3",
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
