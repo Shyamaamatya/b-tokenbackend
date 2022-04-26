@@ -17,9 +17,14 @@ const tokenSchema = new Schema(
       },
 
       time: {
-        type: String,
+        type: Date,
         required: true,
       },
+
+      lineNumber: {
+        type: Number,
+        required: true,
+      }
   },
   { timestamps: true }
 );

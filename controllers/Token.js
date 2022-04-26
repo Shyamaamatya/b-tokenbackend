@@ -1,4 +1,5 @@
 const Token = require("../models/Token");
+const Notification = require("../models/Notification");
 // const uuid = require("uuid");
 const { v4: uuidv4 } = require("uuid");
 
@@ -6,10 +7,19 @@ const { v4: uuidv4 } = require("uuid");
 exports.createToken = (req, res) => {
   const code = uuidv4();
 const time = req.body.time;
+const lineNumber = req.body.lineNumber;
   const user = req.body.user;
-  Token.create({ code, user, time })
+  Token.find({time: time, lineNumber: lineNumber})
+  .then((response) => {
+    if (response.length) {
+      res.status(400).json({ status: "failure", message: "Token not available for this time." });
+    }
+    else {
+      Token.create({ code, user, time, lineNumber})
     .then(() => {
-      res.status(201).json({ status: "success", mesage: "Token saved." });
+      Notification.create({ to: user, from: 'admin', title: 'New Token Created', message: `New token created for ${time}` })
+    .then(() => {
+      res.status(201).json({ status: "success", message: "Token saved." });
     })
     .catch((error) => {
       return res.status(500).send({
@@ -17,6 +27,23 @@ const time = req.body.time;
         message: error.message,
       });
     });
+    })
+    .catch((error) => {
+      return res.status(500).send({
+        status: "error",
+        message: error.message,
+      });
+    });
+    }
+    
+  })
+  .catch((error) => {
+    return res.status(500).send({
+      status: "error",
+      message: error.message,
+    });
+  })
+  
 };
 
 exports.getToken = (req, res) => {
