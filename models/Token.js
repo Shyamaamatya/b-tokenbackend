@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { stringify } = require("qs");
 const Schema = mongoose.Schema;
 
 const tokenSchema = new Schema(
@@ -24,6 +25,12 @@ const tokenSchema = new Schema(
       lineNumber: {
         type: Number,
         required: true,
+        default: 1,
+      },
+
+      purpose: {
+        type: String,
+        default: "Saving"
       }
   },
   { timestamps: true }
