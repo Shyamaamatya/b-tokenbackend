@@ -16,10 +16,10 @@ const lineNumber = req.body.lineNumber;
     }
     else {
       Token.create({ code, user, time, lineNumber})
-    .then(() => {
+    .then((token) => {
       Notification.create({ to: user, from: 'admin', title: 'New Token Created', message: `New token created for ${time}` })
     .then(() => {
-      res.status(201).json({ status: "success", message: "Token saved." });
+      res.status(201).json({ status: "success", message: "Token saved." ,token});
     })
     .catch((error) => {
       return res.status(500).send({
