@@ -8,15 +8,18 @@ exports.createToken = (req, res) => {
   const code = uuidv4();
 const time = req.body.time;
 const lineNumber = req.body.lineNumber;
+console.log(time)
   const user = req.body.user;
+  const purpose = req.body.purpose;
   Token.find({time: time, lineNumber: lineNumber})
   .then((response) => {
     if (response.length) {
       res.status(400).json({ status: "failure", message: "Token not available for this time." });
     }
     else {
-      Token.create({ code, user, time, lineNumber})
+      Token.create({ code, user, time, lineNumber, purpose})
     .then((token) => {
+      console.log(token)
       Notification.create({ to: user, from: 'admin', title: 'New Token Created', message: `New token created for ${time}` })
     .then(() => {
       res.status(201).json({ status: "success", message: "Token saved." ,token});

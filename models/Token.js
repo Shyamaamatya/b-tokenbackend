@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
-const { stringify } = require("qs");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const { stringify } = require('qs')
+const Schema = mongoose.Schema
 
 const tokenSchema = new Schema(
   {
@@ -12,28 +12,28 @@ const tokenSchema = new Schema(
     },
 
     user: {
-        type: Schema.ObjectId,
-        ref: "User",
-        required: true,
-      },
+      type: Schema.ObjectId,
+      ref: 'User',
+      required: true,
+    },
 
-      time: {
-        type: Date,
-        required: true,
-      },
+    time: {
+      type: String,
+      required: true,
+    },
 
-      lineNumber: {
-        type: Number,
-        required: true,
-        default: 1,
-      },
+    lineNumber: {
+      type: Number,
+      required: true,
+      default: 1,
+    },
 
-      purpose: {
-        type: String,
-        default: "Saving"
-      }
+    purpose: {
+      type: String,
+      default: 'Saving',
+    },
   },
   { timestamps: true }
-);
+)
 
-module.exports = mongoose.model("Token", tokenSchema);
+module.exports = mongoose.model('Token', tokenSchema)
