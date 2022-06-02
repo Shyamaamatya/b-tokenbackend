@@ -32,6 +32,11 @@ const tokenSchema = new Schema(
       type: String,
       default: 'Saving',
     },
+
+    status: {
+      type: String,
+      default: 'On line',
+    },
   },
   { timestamps: true }
 )

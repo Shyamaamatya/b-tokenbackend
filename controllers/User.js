@@ -1,5 +1,6 @@
 const User = require('../models/User')
 const { v4: uuidv4 } = require('uuid')
+const Token = require('../models/Token')
 
 exports.createUser = (req, res) => {
   console.log('req.body', req.body)
@@ -22,7 +23,20 @@ exports.createUser = (req, res) => {
 exports.getUser = (req, res) => {
   User.findById(req.params.id)
     .then((user) => {
-      res.status(200).json({ status: 'success', user })
+      if (user) {
+        Token.find({ user: user?._id })
+          .sort({ _id: -1 })
+          .limit(1)
+          .then((token) => {
+            res.status(200).json({ status: 'success', user, token })
+          })
+          .catch((error) => {
+            return res.status(500).send({
+              status: 'error',
+              message: error.message,
+            })
+          })
+      }
     })
     .catch((error) => {
       return res.status(500).send({
