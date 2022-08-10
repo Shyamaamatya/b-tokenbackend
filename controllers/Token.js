@@ -2,6 +2,7 @@ const Token = require('../models/Token')
 const Notification = require('../models/Notification')
 // const uuid = require("uuid");
 const { v4: uuidv4 } = require('uuid')
+const moment = require('moment')
 
 exports.createToken = (req, res) => {
   const code = uuidv4()
@@ -13,12 +14,10 @@ exports.createToken = (req, res) => {
   Token.find({ time: time, lineNumber: lineNumber })
     .then((response) => {
       if (response.length) {
-        res
-          .status(400)
-          .json({
-            status: 'failure',
-            message: 'Token not available for this time.',
-          })
+        res.status(400).json({
+          status: 'failure',
+          message: 'Token not available for this time.',
+        })
       } else {
         Token.create({ code, user, time, lineNumber, purpose })
           .then((token) => {
@@ -27,7 +26,9 @@ exports.createToken = (req, res) => {
               to: user,
               from: 'admin',
               title: 'New Token Created',
-              message: `New token created for ${time}`,
+              message: `New token created for ${moment(time).format(
+                'YYYY-MM-DD hh:mm a'
+              )}`,
             })
               .then(() => {
                 res
